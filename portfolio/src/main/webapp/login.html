@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <form action="action_page.php" method="post">
+        <div class="imgcontainer">
+          <img src="/images/PomoHelper.png" alt="PomoHelperLogo" class="pomohelperlogo">
+        </div>
+      
+        <div class="container1">
+          <h1>Login</h1>
+          <br><br><br><br><br>
+          <label for="emailaddress"><b>Email Address</b></label>
+          <input type="email" placeholder="Enter Email Address" name="emailaddress" required>
+      
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+      
+          <button type="submit">Login</button>
+          <label>
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+          </label>
+        </div>
+      
+        <div class="container" style="background-color:#f1f1f1">
+          <span class="createAccount">New here? <a href="/signup.html">Create an account</a>.</span>
+        </div>
+      </form>
+  </body>
+</html>
