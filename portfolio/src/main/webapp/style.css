@@ -1,9 +1,61 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-}
+/* Body background and font */
+body {
+    background: #E4DCCF;
+    font-family: sans-serif;
+  }
+  
+  /* Main heading */
+  .heading {
+    color: #7D9D9C;
+  }
+  
+  /* Countdown timer */
+  .timer {
+    color: #7D9D9C;
+    text-align: center;
+    width: 20rem;
+    height: 20rem;
+    border: 5px solid #7D9D9C;
+    border-radius: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .row {
+    
+    width: 100%;
+  }
+  
+  /* remove the padding on the play button */
+  .btn {
+    padding: 0;
+  }
+  
+  /* play and reset icons */
+  .fa-play,
+  .fa-redo-alt {
+    color: #7D9D9C;
+    padding: 0.1rem;
 
-#greeting-container {
-  margin-top: 20px;
-}
+  }
+  
+  .fa-play:hover,
+  .fa-redo-alt:hover {
+    color: #576F72;
+    border: 2px solid #576F72;
+    border-radius: 20%;
+    transition: 0.3s ease;
+  }
+
+  
+  /* Dynamic class */
+  /* Make the message visible */
+  .show_message {
+    display: block;
+    padding: 1rem 0;
+    color: #7D9D9C;
+    background: #E4DCCF;
+    border-radius: 0.5rem;
+    transition: 0.5s ease;
+  }

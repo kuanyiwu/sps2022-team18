@@ -1,25 +1,62 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/996973c893.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
   </head>
-  <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click <a href="/hello">here</a> to see content created by server code.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
-      <form method="get" action="/login.html">
-        <button type="submit">Login</button>
-    </form>
-    <form method="get" action="/signup.html">
-        <button type="submit">Sign Up</button>
-    </form>
+  <body onload="template()">
+    <div class="container">
+      
+
+      <!-- Timers -->
+      <div class="container timer">
+        <div class="col-1">
+          <button  class="btn" onclick="taskTimer()">
+            <i class="fas fa-play fa-2x"></i>
+          </button>
+          <button  class="btn" onclick="breakTimer()">
+            <i class="fas fa-play fa-2x"></i>
+          </button>
+        </div>
+        <div class="col-4">
+          <h4 id="minutes"></h4>
+          <h4 id="breakminutes"></h4>
+        </div>
+        <div class="col-1">
+          <h4>:</h4>
+          <h4>:</h4>
+        </div>
+        <div class="col-4">
+          <h4 id="seconds"></h4>
+          <h4 id="breakseconds"></h4>
+        </div>
+      </div>
     </div>
-  </body>
-</html>
+
+      <!-- Messages -->
+      <div class="my-5">
+        <h3 id="done" class="text-center"></h3>
+      </div>
+
+      <!-- Reset button-->
+      <div class="conatiner d-flex justify-content-center my-5">
+        <a href="index.html"><i class="fas fa-redo-alt fa-2x"></i></a>
+      </div>
+      <div id="content">
+        <form method="get" action="/login.html">
+          <button type="submit">Login</button>
+        </form>
+        <form method="get" action="/signup.html">
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+   </body>
+ </html>
