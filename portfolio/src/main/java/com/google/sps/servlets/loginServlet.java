@@ -22,7 +22,7 @@ import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StructuredQuery.OrderBy;
 import com.google.datastore.v1.Key;
 import com.google.gson.Gson;
-import com.google.sps.data.Task;
+import com.google.sps.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,31 +42,30 @@ public class loginServlet extends HttpServlet {
     
     Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
     Query<Entity> query =
-        Query.newEntityQueryBuilder().setKind("Task").setOrderBy(OrderBy.desc("email")).build();
+        Query.newEntityQueryBuilder().setKind("Task").build();
     QueryResults<Entity> results = datastore.run(query);
+
+    /*
+    Filter propertyFilter =
+        new FilterPredicate("email", FilterOperator.EQUAL, email);
+    Query q = new Query("Task").setFilter(propertyFilter);
+*/
 
     List<Task> tasks = new ArrayList<>();
     while (results.hasNext()) {
       Entity entity = results.next();
 
-      long id = entity.getKey().getId();
-      String em = entity.getString("title");
+      String em = entity.getString("email");
       String psw = entity.getString("password");
 
-      if (email.equals("test@test.com") && password.equals("test123"))
+      if (email.equals(em) && password.equals(psw))
       {
         response.sendRedirect("/index.html");
       }
-      else {
-        response.sendRedirect("/login.html");
-      }
 
-      Task task = new Task(id, em, psw);
+      Task task = new Task(em, psw);
       tasks.add(task);
     }
-    Gson gson = new Gson();
-
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(tasks));
+    response.sendRedirect("/login.html");
   }
 }
