@@ -1,4 +1,3 @@
-
 html {
   box-sizing: border-box;
 }
@@ -29,7 +28,6 @@ height: 30px;
 left: 1286px;
 top: 68px;
 
-// Button semibold 
 font-family: 'Raleway';
 font-style: normal;
 font-weight: 600;
@@ -42,7 +40,6 @@ letter-spacing: -0.02em;
 
 color: #0A060E;
 }
-
 
 .timer {
   position: absolute;
@@ -164,7 +161,7 @@ flex-grow: 0;
 }
 
 
-// The sidepanel menu 
+/* The sidepanel menu */
 .sidepanel {
   position: fixed;
   width: 0px;
@@ -231,7 +228,7 @@ color: #000000;
   border-color: transparent;
 }
 
-// The sidepanel links 
+/* The sidepanel links */
 .sidepanel a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
@@ -241,12 +238,12 @@ color: #000000;
   transition: 0.3s;
 }
 
-// When you mouse over the navigation links, change their color 
+/* When you mouse over the navigation links, change their color */
 .sidepanel a:hover {
   color: #f1f1f1;
 }
 
-//Position and style the close button (top right corner) 
+/* Position and style the close button (top right corner) */
 .sidepanel .closebtn {
   position: absolute;
   top: 0;
@@ -255,7 +252,7 @@ color: #000000;
   margin-left: 50px;
 }
 
-// Style the button that is used to open the sidepanel 
+/* Style the button that is used to open the sidepanel */
 .openbtn {
 position: relative;
 width: 25px;
@@ -264,4 +261,3 @@ left: 33px;
 top: 957px;
 border-color: transparent;
 }
-
