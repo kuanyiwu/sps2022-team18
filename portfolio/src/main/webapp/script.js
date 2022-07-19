@@ -13,122 +13,207 @@
 // limitations under the License.
 
 // Required variables
-var session_seconds = "00";
-var session_minutes = 25;
+const timer = {
+  pomodoro: 25,
+  shortBreak: 5,
+  longBreak: 15,
+  longBreakInterval: 4,
+  sessions: 0,
+};
 
-var break_seconds = "00";
-var break_minutes = 5;
+let interval;
 
+//Once the main button is clicked, the value of the data-action attribute on the button is stored in an action variable 
+//and checked to see if it’s equal to “start”. If so, the startTimer() function is invoked and the countdown begins.
+const buttonSound = new Audio('button-sound.mp3');
+const mainButton = document.getElementById('js-btn');
+mainButton.addEventListener('click', () => {
+  buttonSound.play();
+  const { action } = mainButton.dataset;
+  if (action === 'start') {
+    startTimer();
+  } else {
+    stopTimer();
+  }
+});
 
-// Audio file
-var bell = new Audio("bell.mp3");
+//Create an event listener that detects a click on the buttons and a function to switch the mode of the timer appropriately
+const modeButtons = document.querySelector('#js-mode-buttons');
+modeButtons.addEventListener('click', handleMode);
 
-// Starting template for the timer
-function template() {
-  document.getElementById("minutes").innerHTML = session_minutes;
-  document.getElementById("seconds").innerHTML = session_seconds;
+function getRemainingTime(endTime) {
+  const currentTime = Date.parse(new Date());
+  const difference = endTime - currentTime;
+
+  const total = Number.parseInt(difference / 1000, 10);
+  const minutes = Number.parseInt((total / 60) % 60, 10);
+  const seconds = Number.parseInt(total % 60, 10);
+
+  return {
+    total,
+    minutes,
+    seconds,
+  };
+}
+
+//Countdown function
+function startTimer() {
+  let { total } = timer.remainingTime;
+  const endTime = Date.parse(new Date()) + total * 1000;
+
+  if (timer.mode === 'pomodoro') timer.sessions++;
+
+  mainButton.dataset.action = 'stop';
+  mainButton.classList.add('active');
+
+  interval = setInterval(function() {
+    timer.remainingTime = getRemainingTime(endTime);
+    updateClock();
+
+    total = timer.remainingTime.total;
+    if (total <= 0) {
+      clearInterval(interval);
+
+      switch (timer.mode) {
+        case 'pomodoro':
+          if (timer.sessions % timer.longBreakInterval === 0) {
+            switchMode('longBreak');
+          } else {
+            switchMode('shortBreak');
+          }
+          break;
+        default:
+          switchMode('pomodoro');
+      }
+
+      if (Notification.permission === 'granted') {
+        const text =
+          timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+        new Notification(text);
+      }
+
+      document.querySelector(`[data-sound="${timer.mode}"]`).play();
+
+      startTimer();
+    }
+  }, 1000);
+}
+
+//Stop the timer when the stop button is clicked
+function stopTimer() {
+  clearInterval(interval);
+
+  mainButton.dataset.action = 'start';
+  mainButton.classList.remove('active');
+}
+
+//This function is how the countdown portion of the application is updated.
+//The updateClock() function extracts the value of the minutes and seconds properties on the 
+//remainingTime object and pads them with zeros where necessary so that the number always has a width of two.
+function updateClock() {
+  const { remainingTime } = timer;
+  const minutes = `${remainingTime.minutes}`.padStart(2, '0');
+  const seconds = `${remainingTime.seconds}`.padStart(2, '0');
+
+  const min = document.getElementById('js-minutes');
+  const sec = document.getElementById('js-seconds');
+  min.textContent = minutes;
+  sec.textContent = seconds;
+
+  const text =
+    timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+  document.title = `${minutes}:${seconds} — ${text}`;
+}
+
+//The switchMode() function adds two new properties to the timer object. 
+//First, a mode property is set to the current mode which could be pomodoro, shortBreak or longBreak. 
+//Next, a remainingTime property is set on the timer. This is an object which contains three properties of its own:
+function switchMode(mode) {
+  timer.mode = mode;
+  timer.remainingTime = {
+    total: timer[mode] * 60,
+    minutes: timer[mode],
+    seconds: 0,
+  };
+
+  document
+    .querySelectorAll('button[data-mode]')
+    .forEach(e => e.classList.remove('active'));
+  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+  document.body.style.backgroundColor = `var(--${mode})`;
+
+  updateClock();
+}
+
+//Within the handleMode() function, the value of the data-mode attribute is retrieved from the target element.
+function handleMode(event) {
+  const { mode } = event.target.dataset;
+
+  if (!mode) return;
+
+  switchMode(mode);
+  stopTimer();
+}
+
+//This ensures that the default mode for the timer is pomodoro and the contents of timer.
+//remainingTime is set to the appropriate values for a pomodoro session
+//In addition, this functions ask permission to the user whether they want notifications on their web browser
+document.addEventListener('DOMContentLoaded', () => {
+  if ('Notification' in window) {
+    if (
+      Notification.permission !== 'granted' &&
+      Notification.permission !== 'denied'
+    ) {
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          new Notification(
+            'Awesome! You will be notified at the start of each session'
+          );
+        }
+      });
+    }
+  }
+
+  switchMode('pomodoro');
+});
+
+//
+function next(){
   
-  document.getElementById("breakminutes").innerHTML = break_minutes;
-  document.getElementById("breakseconds").innerHTML = break_seconds;
-}
-
-
-function taskTimer() 
-{
-      // Change the minutes and seconds to starting time
-      session_minutes = 24;
-      session_seconds = 59;
-     
-      // Add the seconds and minutes to the page
-      document.getElementById("minutes").innerHTML = session_minutes;
-      document.getElementById("seconds").innerHTML = session_seconds;
-
-      // Start the countdown
-      var minutes_interval = setInterval(minutesTimer, 60000);
-      var seconds_interval = setInterval(secondsTimer, 1000);
-
-      // Function for minute counter
-      function minutesTimer() {
-        session_minutes = session_minutes - 1;
-        document.getElementById("minutes").innerHTML = session_minutes;
-      }
-
-      // Function for second counter
-      function secondsTimer() {
-        session_seconds = session_seconds - 1;
-        document.getElementById("seconds").innerHTML = session_seconds;
-
-        // Check if the seconds and minutes counter has reached 0
-        // If reached 0 then end the session
-        if (session_seconds <= 0) { //do not forget to change back to 0!!!
-          if (session_minutes <= 0) { // do not forget to change back to 0!!!
-            // Clears the interval i.e. stops the counter
-            clearInterval(minutes_interval);
-            clearInterval(seconds_interval);
-
-            // Add the message to the html
-            document.getElementById("done").innerHTML =
-              "Session Completed!! Take a Break";
-
-            // Make the html message div visible
-            document.getElementById("done").classList.add("show_message");
-
-            // PLay the bell sound to tell the end of session
-            bell.play();
-          }
-          // Reset the session seconds to 60
-          session_seconds = 60;
+    switch (timer.mode) {
+      case 'pomodoro':
+        if (timer.sessions % timer.longBreakInterval > 0) {
+          switchMode('longBreak');
+        } else {
+          switchMode('shortBreak');
         }
-      }
+        break;
+      default:
+        switchMode('pomodoro');
+    }
+};
+
+
+// Set the width of the sidebar to 772px (show it) 
+function openNav() {
+  document.getElementById("mySidepanel").style.width = "772px";
+}
+
+//Set the width of the sidebar to 0 (hide it) 
+function closeNav() {
+  document.getElementById("mySidepanel").style.width = "0";
 }
 
 
-function breakTimer() 
-{
-      // Change the minutes and seconds to starting time
-      break_minutes = 4;
-      break_seconds = 59;
-      
-      // Add the seconds and minutes to the page
-      document.getElementById("breakminutes").innerHTML = break_minutes; 
-      document.getElementById("breakseconds").innerHTML = break_seconds;
-
-      // Start the countdown
-      var minutes_interval = setInterval(minutesTimer, 60000);
-      var seconds_interval = setInterval(secondsTimer, 1000);
-
-      // Functions
-      // Function for minute counter
-      function minutesTimer() {
-        break_minutes = break_minutes - 1;
-        document.getElementById("breakminutes").innerHTML = break_minutes;
-      }
-
-      // Function for second counter
-      function secondsTimer() {
-        break_seconds = break_seconds - 1;
-        document.getElementById("breakseconds").innerHTML = break_seconds;
-
-        // Check if the seconds and minutes counter has reached 0
-        // If reached 0 then end the session
-        if (break_seconds <= 0) { //do not forget to change back to 0!!!
-          if (break_minutes <= 0) { // do not forget to change back to 0!!!
-            // Clears the interval i.e. stops the counter
-            clearInterval(minutes_interval);
-            clearInterval(seconds_interval);
-
-            // Add the message to the html
-            document.getElementById("done").innerHTML =
-              "Break Completed. Back to Work!";
-
-            // Make the html message div visible
-            document.getElementById("done").classList.add("show_message");
-
-            // PLay the bell sound to tell the end of session
-            bell.play();
-          }
-          // Reset the session seconds to 60
-          break_seconds = 60;
-        }
-      }
-}
+//Slider Function, work in progress
+const slideValue = document.querySelector("span");
+      const inputSlider = document.querySelector("input");
+      inputSlider.oninput = (()=>{
+        let value = inputSlider.value;
+        slideValue.textContent = value;
+        slideValue.style.left = (value/2) + "%";
+        slideValue.classList.add("show");
+      });
+      inputSlider.onblur = (()=>{
+        slideValue.classList.remove("show");
+      });
