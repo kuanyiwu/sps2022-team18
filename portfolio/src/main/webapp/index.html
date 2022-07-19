@@ -63,57 +63,42 @@
         <button class="main-button" data-action="start" id="js-btn">
           <i class="fa-solid fa-play fa-4x"></i>
         </button>
-        <button class="forward" onclick="next()"><i class="fa-solid fa-forward-fast fa-2x"></i></button>
+      </button>
+      <button class="forward" onclick="next()"><i class="fa-solid fa-forward-fast fa-2x"></i></button>
+    </div>
+
+    <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
+    
+    <div id="mySidepanel" class="sidepanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <div class="setting">
+        <h1>Settings</h1>
       </div>
       
-       <!-- Settings-->
-      <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
-      
-      <div id="mySidepanel" class="sidepanel">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <div class="setting">
-          <h1>Settings</h1>
-        </div>
+       <div class="gridcontainer">
         
-         <div class="gridcontainer">
-          <button class="gridbtn">Pomodoro duration</button>
-          <div class="range">
-            <div class="sliderValue">
-              <span>25<span>
-            </div>
-            <div class="field">
-                <div class="value left">0</div>
-                <input type="range" min="0" max="60" value="25" steps="1">
-                <div class="value right">60</div>
-            </div>
+        <label class="gridbtn">Pomodoro Duration</label>
+          <div class="pomodoro">
+            <input id = "pomodoro" type = "number" min="0" max="60" step ="1" value="25">
           </div>
 
-          <button class="gridbtn">Short break duration</button>
-          <div class="range">
-            <div class="sliderValue">
-              <span>5<span>
-            </div>
-            <div class="field">
-                <div class="value left">0</div>
-                <input type="range" min="0" max="60" value="25" steps="1">
-                <div class="value right">60</div>
-            </div>
-          </div>
-          <button class="gridbtn">Long break duration</button>
-          <div class="range">
-            <div class="sliderValue">
-              <span>15<span>
-            </div>
-            <div class="field">
-                <div class="value left">0</div>
-                <input type="range" min="0" max="60" value="25" steps="1">
-                <div class="value right">60</div>
-            </div>
-          </div>
-          <button class="gridbtn">Sound</button>
-        </div>
-      </div>
 
+        <label class="gridbtn">Short Break Duration</label>
+          <div class="shortBreak">
+            <input id="shortBreak" type = "number" min="0" max="60" step ="1" value="5">
+          </div>
+
+          <label class="gridbtn">Long Break Duration</label>
+          <div class="longBreak">
+            <input id="longBreak"  type = "number" min="0" max="60" step ="1" value="15">
+          </div>
+
+        <button id="Mybutton">
+        Save
+        </button>
+      </div> 
+
+    </div>
      <!-- Audio -->
     </main>
     <div class="hidden">
@@ -121,7 +106,7 @@
       <audio src="bell.mp3" data-sound="shortBreak"></audio>
       <audio src="bell.mp3" data-sound="longBreak"></audio>
     </div>
-    <script src="main.js"></script>
+    <script src="script.js"></script>
             
       <div id="content">
         <form method="get" action="/login.html">
