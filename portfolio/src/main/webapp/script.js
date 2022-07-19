@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Required variables
+// Required properties
 const timer = {
   pomodoro: 25,
   shortBreak: 5,
@@ -203,17 +203,3 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidepanel").style.width = "0";
 }
-
-
-//Slider Function, work in progress
-const slideValue = document.querySelector("span");
-      const inputSlider = document.querySelector("input");
-      inputSlider.oninput = (()=>{
-        let value = inputSlider.value;
-        slideValue.textContent = value;
-        slideValue.style.left = (value/2) + "%";
-        slideValue.classList.add("show");
-      });
-      inputSlider.onblur = (()=>{
-        slideValue.classList.remove("show");
-      });
