@@ -29,8 +29,6 @@ const buttonSound = new Audio('button-sound.mp3');
 const playPauseButton = document.getElementById('play-pause-btn');
 
 // Create an event listener that detects a click on the buttons and a function to switch the mode of the timer appropriately
-const modeButtons = document.querySelector('#js-mode-buttons');
-modeButtons.addEventListener('click', handleMode);
 
 function getRemainingTime(endTime) {
   const currentTime = Date.parse(new Date().toString());
@@ -54,13 +52,12 @@ function startTimer() {
 
   if (timer.mode === 'pomodoro') timer.sessions++;
 
-  playPauseButton.dataset.action = 'stop';
-
   interval = setInterval(function() {
     timer.remainingTime = getRemainingTime(endTime);
     updateClock();
 
     total = timer.remainingTime.total;
+
     if (total <= 0) {
       clearInterval(interval);
       next(); // advance to next mode
@@ -86,16 +83,30 @@ function stopTimer() {
 // Toggles play and pause button image and starts and stops timer
 function toggle(b) {
   if (b.className!=='pause') {
-    startTimer()
-    b.src='images/pause-solid.svg'
+    startTimer();
+    disableModeSwitching();
+    b.src='images/pause-solid.svg';
     b.className='pause';
 
   } else if (b.className==='pause') {
-    stopTimer()
-    b.src='images/play-solid.svg'
+    stopTimer();
+    enableModeSwitching();
+    b.src='images/play-solid.svg';
     b.className='play';
   }
   return false;
+}
+// Helper function called from toggle: disables mode switching.
+function disableModeSwitching() {
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    if (!btn.classList.contains('current')) btn.disabled = true;
+  });
+}
+// Helper function called from toggle: enables mode switching.
+function enableModeSwitching() {
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    if (!btn.classList.contains('current')) btn.disabled = false;
+  });
 }
 
 //This function is how the countdown portion of the application is updated.
@@ -103,7 +114,7 @@ function toggle(b) {
 //remainingTime object and pads them with zeros where necessary so that the number always has a width of two.
 function updateClock() {
   const { remainingTime } = timer;
-  const minutes = `${remainingTime.minutes}`.padStart(2, '0');
+  const minutes = `${remainingTime.minutes}`;
   const seconds = `${remainingTime.seconds}`.padStart(2, '0');
 
   const min = document.getElementById('js-minutes');
@@ -126,24 +137,21 @@ function switchMode(mode) {
     minutes: timer[mode],
     seconds: 0,
   };
-
-  document
-    .querySelectorAll('button[data-mode]')
-    .forEach(e => e.classList.remove('active'));
-  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
-  document.body.style.backgroundColor = `var(--${mode})`;
-
+  document.querySelector('.mode-button.current').classList.remove('current');
+  document.querySelector(`[data-mode="${mode}"]`).classList.add('current');
+  updateColors(mode);
   updateClock();
 }
-
-//Within the handleMode() function, the value of the data-mode attribute is retrieved from the target element.
-function handleMode(event) {
-  const { mode } = event.target.dataset;
-
-  if (!mode) return;
-
-  switchMode(mode);
-  stopTimer();
+// Helper function to update the colors. Called when switching mode.
+function updateColors(mode) {
+  document.body.style.backgroundColor = `var(--${mode})`;
+  document.getElementById('clock').style.textShadow = `0 4px 4px var(--${mode}-shadow)`;
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    btn.style.color = `var(--${mode}-shadow)`;
+    if (btn.classList.contains('current')) {
+      btn.style.borderColor = `var(--${mode}-shadow)`;
+    }
+  })
 }
 
 //This ensures that the default mode for the timer is pomodoro and the contents of timer.

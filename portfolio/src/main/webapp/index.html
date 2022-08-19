@@ -12,88 +12,87 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<main class="app">
-  <div class="container-fluid height-full">
-    <!-- Login -->
-    <a class="btn btn-outline-primary float-right" href="login.html" role="button">Login</a>
+<main>
+  <div class="container-fluid">
+    <div class="d-flex flex-column justify-content-between height-full">
+      <!-- Top Bar -->
+      <div class="navbar p-4">
+        <button class="btn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
+        <a class="btn btn-outline-primary" href="login.html" role="button">Login</a>
+      </div>
 
-    <!-- Timers -->
-    <div class="timer">
-      <div class="container w-80" id="js-mode-buttons">
-        <div class="d-flex justify-content-center align-items-center">
-          <!-- Pomodoro -->
-          <div class="p-2">
-            <button data-mode="pomodoro" class="button active mode-button" id="js-pomodoro">Pomodoro</button>
+      <!-- Main Content -->
+      <div class="container my-5">
+        <div class="flex-column align-items-center justify-content-center">
+          <!-- Mode Buttons -->
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="p-2">
+              <button data-mode="pomodoro" class="current mode-button px-3" id="js-pomodoro" onclick="switchMode('pomodoro')">Pomodoro</button>
+            </div>
+            <div class="p-2">
+              <button data-mode="shortBreak" class="mode-button px-3" id="js-short-break" onclick="switchMode('shortBreak')">Short break</button>
+            </div>
+            <div class="p-2">
+              <button data-mode="longBreak" class="mode-button px-3" id="js-long-break" onclick="switchMode('longBreak')">Long break</button>
+            </div>
           </div>
-          <!-- Shortbreak -->
-          <div class="p-2">
-            <button data-mode="shortBreak" class="button mode-button" id="js-short-break">Short break</button>
+          <!-- Countdown -->
+          <div class="d-flex justify-content-center p-5">
+            <div id="clock">
+              <span id="js-minutes">25</span>
+              <span class="separator">:</span>
+              <span id="js-seconds">00</span>
+            </div>
           </div>
-          <!-- Longbreak -->
-          <div class="p-2">
-            <button data-mode="longBreak" class="button mode-button" id="js-long-break">Long break</button>
+          <!-- Control Buttons -->
+          <div class="d-flex justify-content-center align-items-center py-5">
+            <div class="px-5">
+              <button class="btn bg-transparent">
+                <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
+              </button>
+            </div>
+            <div class="px-5">
+              <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);"
+                     alt="">
+            </div>
+            <div class="px-5">
+              <button class="btn bg-transparent" onclick="next()"><i class="fa-solid fa-forward fa-2x"></i></button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Visual -->
-      <div class="countdown">
-        <div class="clock" id="js-clock">
-          <span id="js-minutes">25</span>
-          <span class="separator">:</span>
-          <span id="js-seconds">00</span>
-        </div>
-      </div>
-
-      <!-- Control Buttons -->
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col">
-            <button class="restart">
-              <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
-            </button>
-          </div>
-          <div class="col-6">
-            <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);"
-                   alt="play pause button">
-          </div>
-          <div class="col">
-            <button class="forward" onclick="next()"><i class="fa-solid fa-forward fa-2x"></i></button>
-          </div>
-        </div>
+      <!-- Footer -->
+      <div class="p-4">
+        <p class="float-right text-muted">@2022 Google SPS Project by Aaron, Iris, Jonathan, Riana</p>
       </div>
     </div>
-
-
-    <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
-
+    <!-- Settings Panel -->
     <div id="mySidepanel" class="sidepanel">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <div class="setting">
-        <h1>Settings</h1>
+        <p>Settings</p>
       </div>
 
-      <div class="gridcontainer">
-
-        <label class="gridbtn">Pomodoro Duration</label>
-        <div class="pomodoro">
-          <input id="pomodoro" type="number" min="0" max="60" step="1" value="25">
+      <div class="flex">
+        <div class="row">
+          <p class="col">Pomodoro Duration</p>
+          <div class="col pomodoro">
+            <input id="pomodoro" type="number" min="0" max="60" step="1" value="25">
+          </div>
         </div>
 
-
-        <label class="gridbtn">Short Break Duration</label>
+        <p>Short Break Duration</p>
         <div class="shortBreak">
           <input id="shortBreak" type="number" min="0" max="60" step="1" value="5">
         </div>
 
-        <label class="gridbtn">Long Break Duration</label>
+        <p>Long Break Duration</p>
         <div class="longBreak">
           <input id="longBreak" type="number" min="0" max="60" step="1" value="15">
         </div>
 
-        <button id="Mybutton">
-          Save
-        </button>
+        <button class="btn btn-outline-secondary" id="save-settings-btn">Save</button>
       </div>
 
     </div>
@@ -105,7 +104,6 @@
   <audio src="bell.mp3" data-sound="shortBreak"></audio>
   <audio src="bell.mp3" data-sound="longBreak"></audio>
 </div>
-<script src="main.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
