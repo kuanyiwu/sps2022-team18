@@ -127,9 +127,9 @@ function updateClock() {
   document.title = `${minutes}:${seconds} — ${text}`;
 }
 
-//The switchMode() function adds two new properties to the timer object. 
-//First, a mode property is set to the current mode which could be pomodoro, shortBreak or longBreak. 
-//Next, a remainingTime property is set on the timer. This is an object which contains three properties of its own:
+/* The switchMode() function adds two new properties to the timer object.
+First, a mode property is set to the current mode which could be pomodoro, shortBreak or longBreak.
+Next, a remainingTime property is set on the timer. This is an object which contains three properties of its own: */
 function switchMode(mode) {
   timer.mode = mode;
   timer.remainingTime = {
@@ -154,9 +154,9 @@ function updateColors(mode) {
   })
 }
 
-//This ensures that the default mode for the timer is pomodoro and the contents of timer.
-//remainingTime is set to the appropriate values for a pomodoro session
-//In addition, this functions ask permission to the user whether they want notifications on their web browser
+/* This ensures that the default mode for the timer is pomodoro and the contents of timer.
+remainingTime is set to the appropriate values for a pomodoro session
+In addition, this functions ask permission to the user whether they want notifications on their web browser */
 document.addEventListener('DOMContentLoaded', () => {
   if ('Notification' in window) {
     if (
@@ -189,15 +189,4 @@ function next(){
     default:
       switchMode('pomodoro');
   }
-}
-
-
-// Set the width of the sidebar to 772px (show it) 
-function openNav() {
-  document.getElementById("mySidepanel").style.width = "772px";
-}
-
-//Set the width of the sidebar to 0 (hide it) 
-function closeNav() {
-  document.getElementById("mySidepanel").style.width = "0";
 }
