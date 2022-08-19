@@ -170,18 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Advances the timer to the next mode
 function next(){
-  if (timer.sessions !== 0) {
-    switch (timer.mode) {
-      case 'pomodoro':
-        if (timer.sessions % timer.longBreakInterval === 0) {
-          switchMode('longBreak');
-        } else {
-          switchMode('shortBreak');
-        }
-        break;
-      default:
-        switchMode('pomodoro');
-    }
+  switch (timer.mode) {
+    case 'pomodoro':
+      if (timer.sessions % timer.longBreakInterval === 0 && timer.sessions !== 0) {
+        switchMode('longBreak');
+      } else {
+        switchMode('shortBreak');
+      }
+      break;
+    default:
+      switchMode('pomodoro');
   }
 }
 
