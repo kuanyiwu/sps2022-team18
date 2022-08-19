@@ -23,6 +23,11 @@ body {
   user-select: none;
 }
 
+.height-full {
+  height: 100vh;
+  overflow: auto;
+}
+
 .timer {
   position: absolute;
   top: 50%;
