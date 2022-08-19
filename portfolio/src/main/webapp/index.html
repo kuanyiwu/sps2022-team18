@@ -1,121 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Pomodoro Clock </title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <style> @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap'); </style>
-    <script src="https://kit.fontawesome.com/962de9f670.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main class="app">
-   
-       <!-- Login -->
-      <button class="login"><a href="/login.html">Log In</a></button>
-      
-      <!-- Timers -->
-      <div class="timer">
-        <div class="button-group mode-buttons" id="js-mode-buttons">
-          
-          <!-- Pomodoro -->
-          <button
-            data-mode="pomodoro"
-            class="button active mode-button"
-            id="js-pomodoro"
-          >
-            Pomodoro
-          </button>
-          
-           <!-- Shortbreak -->
-          <button
-            data-mode="shortBreak"
-            class="button mode-button"
-            id="js-short-break"
-          >
-            Short break
-          </button>
-          
-           <!-- Longbreak -->
-          <button
-            data-mode="longBreak"
-            class="button mode-button"
-            id="js-long-break"
-          >
-            Long break
-          </button>
-        </div>
-        
-         <!-- Visual -->
-        <div class="countdown">
-        <div class="clock" id="js-clock">
-          <span id="js-minutes">25</span>
-          <span class="separator">:</span>
-          <span id="js-seconds">00</span>
-        </div>
-        </div>
-        
-         <!-- Buttons -->
-        <button class="restart">
-          <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
-         </button>
-        <button class="main-button" data-action="start" id="js-btn">
-          <i class="fa-solid fa-play fa-4x"></i>
-        </button>
+<head>
+  <title>Pomodoro Clock</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <script src="https://kit.fontawesome.com/962de9f670.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<main class="app">
+
+  <!-- Login -->
+  <button class="login"><a href="login.html">Log In</a></button>
+
+  <!-- Timers -->
+  <div class="timer">
+    <div class="button-group mode-buttons" id="js-mode-buttons">
+
+      <!-- Pomodoro -->
+      <button data-mode="pomodoro" class="button active mode-button" id="js-pomodoro">Pomodoro</button>
+
+      <!-- Shortbreak -->
+      <button data-mode="shortBreak" class="button mode-button" id="js-short-break">Short break</button>
+
+      <!-- Longbreak -->
+      <button data-mode="longBreak" class="button mode-button" id="js-long-break">Long break</button>
+    </div>
+
+    <!-- Visual -->
+    <div class="countdown">
+      <div class="clock" id="js-clock">
+        <span id="js-minutes">25</span>
+        <span class="separator">:</span>
+        <span id="js-seconds">00</span>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div>
+      <button class="restart">
+        <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
       </button>
+      <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);" alt="play pause button">
       <button class="forward" onclick="next()"><i class="fa-solid fa-forward-fast fa-2x"></i></button>
     </div>
+  </div>
 
-    <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
-    
-    <div id="mySidepanel" class="sidepanel">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <div class="setting">
-        <h1>Settings</h1>
+  <!-- Login Signup -->
+  <div class="gridcontainer">
+    <form method="get" action="login.html">
+      <input type="submit" value="Login"/>
+    </form>
+    <form method="get" action="signup.html">
+      <input type="submit" value="Signup"/>
+    </form>
+  </div>
+
+  <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
+
+  <div id="mySidepanel" class="sidepanel">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div class="setting">
+      <h1>Settings</h1>
+    </div>
+
+    <div class="gridcontainer">
+
+      <label class="gridbtn">Pomodoro Duration</label>
+      <div class="pomodoro">
+        <input id="pomodoro" type="number" min="0" max="60" step="1" value="25">
       </div>
-      
-       <div class="gridcontainer">
-        
-        <label class="gridbtn">Pomodoro Duration</label>
-          <div class="pomodoro">
-            <input id = "pomodoro" type = "number" min="0" max="60" step ="1" value="25">
-          </div>
 
 
-        <label class="gridbtn">Short Break Duration</label>
-          <div class="shortBreak">
-            <input id="shortBreak" type = "number" min="0" max="60" step ="1" value="5">
-          </div>
+      <label class="gridbtn">Short Break Duration</label>
+      <div class="shortBreak">
+        <input id="shortBreak" type="number" min="0" max="60" step="1" value="5">
+      </div>
 
-          <label class="gridbtn">Long Break Duration</label>
-          <div class="longBreak">
-            <input id="longBreak"  type = "number" min="0" max="60" step ="1" value="15">
-          </div>
+      <label class="gridbtn">Long Break Duration</label>
+      <div class="longBreak">
+        <input id="longBreak" type="number" min="0" max="60" step="1" value="15">
+      </div>
 
-        <button id="Mybutton">
+      <button id="Mybutton">
         Save
-        </button>
-      </div> 
+      </button>
+    </div>
 
-    </div>
-     <!-- Audio -->
-    </main>
-    <div class="hidden">
-      <audio src="bell.mp3" data-sound="pomodoro"></audio>
-      <audio src="bell.mp3" data-sound="shortBreak"></audio>
-      <audio src="bell.mp3" data-sound="longBreak"></audio>
-    </div>
-    <script src="main.js"></script>
-    <script src="script.js"></script>
-            
-      <div id="content">
-        <form method="get" action="/login.html">
-          <button type="submit">Login</button>
-        </form>
-        <form method="get" action="/signup.html">
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
-   </body>
- </html>
+  </div>
+  <!-- Audio -->
+</main>
+<div class="hidden">
+  <audio src="bell.mp3" data-sound="pomodoro"></audio>
+  <audio src="bell.mp3" data-sound="shortBreak"></audio>
+  <audio src="bell.mp3" data-sound="longBreak"></audio>
+</div>
+<script src="main.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
