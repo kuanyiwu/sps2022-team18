@@ -23,26 +23,6 @@ body {
   user-select: none;
 }
 
-.login{
-  position: absolute;
-  width: 60px;
-  height: 30px;
-  left: 1286px;
-  top: 68px;
-
-  font-family: 'Raleway', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 19px;
-  border-color: transparent;
-  /* identical to box height */
-
-  letter-spacing: -0.02em;
-
-  color: #0A060E;
-}
-
 .timer {
   position: absolute;
   top: 50%;
