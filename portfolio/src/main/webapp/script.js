@@ -23,31 +23,22 @@ const timer = {
 
 let interval;
 
-//Once the main button is clicked, the value of the data-action attribute on the button is stored in an action variable 
-//and checked to see if it’s equal to “start”. If so, the startTimer() function is invoked and the countdown begins.
+// Once the play-pause button is clicked, the value of the data-action attribute on the button is stored in an action variable
+// and checked to see if it’s equal to “start”. If so, the startTimer() function is invoked and the countdown begins.
 const buttonSound = new Audio('button-sound.mp3');
-const mainButton = document.getElementById('js-btn');
-mainButton.addEventListener('click', () => {
-  buttonSound.play();
-  const { action } = mainButton.dataset;
-  if (action === 'start') {
-    startTimer();
-  } else {
-    stopTimer();
-  }
-});
+const playPauseButton = document.getElementById('play-pause-btn');
 
-//Create an event listener that detects a click on the buttons and a function to switch the mode of the timer appropriately
+// Create an event listener that detects a click on the buttons and a function to switch the mode of the timer appropriately
 const modeButtons = document.querySelector('#js-mode-buttons');
 modeButtons.addEventListener('click', handleMode);
 
 function getRemainingTime(endTime) {
-  const currentTime = Date.parse(new Date());
+  const currentTime = Date.parse(new Date().toString());
   const difference = endTime - currentTime;
 
-  const total = Number.parseInt(difference / 1000, 10);
-  const minutes = Number.parseInt((total / 60) % 60, 10);
-  const seconds = Number.parseInt(total % 60, 10);
+  const total = Math.round(difference / 1000);
+  const minutes = Math.round((total / 60) % 60);
+  const seconds = Math.round(total % 60);
 
   return {
     total,
@@ -56,15 +47,14 @@ function getRemainingTime(endTime) {
   };
 }
 
-//Countdown function
+// Countdown function
 function startTimer() {
   let { total } = timer.remainingTime;
-  const endTime = Date.parse(new Date()) + total * 1000;
+  const endTime = Date.parse(new Date().toString()) + total * 1000;
 
   if (timer.mode === 'pomodoro') timer.sessions++;
 
-  mainButton.dataset.action = 'stop';
-  mainButton.classList.add('active');
+  playPauseButton.dataset.action = 'stop';
 
   interval = setInterval(function() {
     timer.remainingTime = getRemainingTime(endTime);
@@ -73,22 +63,11 @@ function startTimer() {
     total = timer.remainingTime.total;
     if (total <= 0) {
       clearInterval(interval);
-
-      switch (timer.mode) {
-        case 'pomodoro':
-          if (timer.sessions % timer.longBreakInterval === 0) {
-            switchMode('longBreak');
-          } else {
-            switchMode('shortBreak');
-          }
-          break;
-        default:
-          switchMode('pomodoro');
-      }
+      next(); // advance to next mode
 
       if (Notification.permission === 'granted') {
         const text =
-          timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+          timer.mode === 'pomodoro' ? 'Get to work!' : 'Take a break!';
         new Notification(text);
       }
 
@@ -99,12 +78,24 @@ function startTimer() {
   }, 1000);
 }
 
-//Stop the timer when the stop button is clicked
+// Stop the timer when the stop button is clicked
 function stopTimer() {
   clearInterval(interval);
+}
 
-  mainButton.dataset.action = 'start';
-  mainButton.classList.remove('active');
+// Toggles play and pause button image and starts and stops timer
+function toggle(b) {
+  if (b.className!=='pause') {
+    startTimer()
+    b.src='images/pause-solid.svg'
+    b.className='pause';
+
+  } else if (b.className==='pause') {
+    stopTimer()
+    b.src='images/play-solid.svg'
+    b.className='play';
+  }
+  return false;
 }
 
 //This function is how the countdown portion of the application is updated.
@@ -121,7 +112,7 @@ function updateClock() {
   sec.textContent = seconds;
 
   const text =
-    timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+    timer.mode === 'pomodoro' ? 'Get to work!' : 'Take a break!';
   document.title = `${minutes}:${seconds} — ${text}`;
 }
 
@@ -177,12 +168,12 @@ document.addEventListener('DOMContentLoaded', () => {
   switchMode('pomodoro');
 });
 
-//
+// Advances the timer to the next mode
 function next(){
-  
+  if (timer.sessions !== 0) {
     switch (timer.mode) {
       case 'pomodoro':
-        if (timer.sessions % timer.longBreakInterval > 0) {
+        if (timer.sessions % timer.longBreakInterval === 0) {
           switchMode('longBreak');
         } else {
           switchMode('shortBreak');
@@ -191,7 +182,8 @@ function next(){
       default:
         switchMode('pomodoro');
     }
-};
+  }
+}
 
 
 // Set the width of the sidebar to 772px (show it) 
