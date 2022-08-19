@@ -40,12 +40,20 @@
     </div>
 
     <!-- Buttons -->
-    <div>
-      <button class="restart">
-        <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
-      </button>
-      <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);" alt="play pause button">
-      <button class="forward" onclick="next()"><i class="fa-solid fa-forward-fast fa-2x"></i></button>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col">
+          <button class="restart">
+            <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
+          </button>
+        </div>
+        <div class="col-6">
+          <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);" alt="play pause button">
+        </div>
+        <div class="col">
+          <button class="forward" onclick="next()"><i class="fa-solid fa-forward fa-2x"></i></button>
+        </div>
+      </div>
     </div>
   </div>
 
