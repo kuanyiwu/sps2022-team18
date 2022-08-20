@@ -4,11 +4,18 @@
   <title>Pomodoro Clock</title>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/962de9f670.js" crossorigin="anonymous"></script>
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -56,16 +63,14 @@
           <!-- Control Buttons -->
           <div class="d-flex justify-content-center align-items-center py-5">
             <div class="px-5">
-              <button class="btn bg-transparent">
-                <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
-              </button>
+              <button class="btn bg-transparent" onclick="resetTimer()"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></button>
             </div>
             <div class="px-5">
-              <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="toggle(this);"
+              <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="togglePlay();"
                      alt="">
             </div>
             <div class="px-5">
-              <button class="btn bg-transparent" onclick="next()"><i class="fa-solid fa-forward fa-2x"></i></button>
+              <button class="btn bg-transparent" onclick="next(); resetTimer();"><i class="fa-solid fa-forward fa-2x"></i></button>
             </div>
           </div>
         </div>
@@ -85,20 +90,20 @@
       <div class="offcanvas-body">
         <div class="container">
           <div class="flex">
-            <label class="form-check-label" for="pomodoro">Pomodoro</label>
-            <input id="pomodoro" type="range" min="10" max="60" step="5"
+            <label class="form-check-label" for="pomodoro-length">Pomodoro</label>
+            <input id="pomodoro-length" type="range" min="10" max="60" step="5"
                      value="25" oninput="this.nextElementSibling.value = this.value + ' min'">
             <output>25 min</output>
           </div>
           <div class="flex">
-            <label class="form-check-label" for="short-break">Short Break</label>
-              <input id="short-break" type="range" min="1" max="30" step="1"
+            <label class="form-check-label" for="short-break-length">Short Break</label>
+              <input id="short-break-length" type="range" min="1" max="30" step="1"
                    value="5" oninput="this.nextElementSibling.value = this.value + ' min'">
             <output>5 min</output>
           </div>
           <div class="flex">
-            <label class="form-check-label" for="long-break">Long Break</label>
-            <input id="long-break" type="range" min="10" max="60" step="5"
+            <label class="form-check-label" for="long-break-length">Long Break</label>
+            <input id="long-break-length" type="range" min="10" max="60" step="5"
                    value="15" oninput="this.nextElementSibling.value = this.value + ' min'">
             <output>15 min</output>
           </div>
@@ -117,14 +122,15 @@
           <div class="flex">
             <label class="form-check-label" for="sound-effect">Sound Effect</label>
             <select class="form-select" id="sound-effect">
-              <option selected>Default</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option selected>Bell</option>
+              <option value="1">Beeping</option>
+              <option value="2">Music Box</option>
+              <option value="3">Orchestra</option>
+              <option value="4">Trumpet</option>
             </select>
           </div>
           <div class="container">
-            <button class="btn btn-outline-secondary" id="save-settings-btn">Save</button>
+            <button class="btn btn-outline-secondary" id="save-settings-btn" onclick="updateSettings()">Save</button>
           </div>
         </div>
       </div>
