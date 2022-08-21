@@ -1,121 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Pomodoro Clock </title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <style> @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap'); </style>
-    <script src="https://kit.fontawesome.com/962de9f670.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main class="app">
-   
-       <!-- Login -->
-      <button class="login"><a href="/login.html">Log In</a></button>
-      
-      <!-- Timers -->
-      <div class="timer">
-        <div class="button-group mode-buttons" id="js-mode-buttons">
-          
-          <!-- Pomodoro -->
-          <button
-            data-mode="pomodoro"
-            class="button active mode-button"
-            id="js-pomodoro"
-          >
-            Pomodoro
-          </button>
-          
-           <!-- Shortbreak -->
-          <button
-            data-mode="shortBreak"
-            class="button mode-button"
-            id="js-short-break"
-          >
-            Short break
-          </button>
-          
-           <!-- Longbreak -->
-          <button
-            data-mode="longBreak"
-            class="button mode-button"
-            id="js-long-break"
-          >
-            Long break
-          </button>
-        </div>
-        
-         <!-- Visual -->
-        <div class="countdown">
-        <div class="clock" id="js-clock">
-          <span id="js-minutes">25</span>
-          <span class="separator">:</span>
-          <span id="js-seconds">00</span>
-        </div>
-        </div>
-        
-         <!-- Buttons -->
-        <button class="restart">
-          <a href="index.html" style="color:black"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></a>
-         </button>
-        <button class="main-button" data-action="start" id="js-btn">
-          <i class="fa-solid fa-play fa-4x"></i>
-        </button>
-      </button>
-      <button class="forward" onclick="next()"><i class="fa-solid fa-forward-fast fa-2x"></i></button>
-    </div>
-
-    <button class="openbtn" onclick="openNav()"><i class="fa-solid fa-gear"></i></button>
-    
-    <div id="mySidepanel" class="sidepanel">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <div class="setting">
-        <h1>Settings</h1>
+<head>
+  <title>Pomodoro Clock</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/962de9f670.js" crossorigin="anonymous"></script>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<main>
+  <div class="container-fluid">
+    <div class="d-flex flex-column justify-content-between height-full">
+      <!-- Top Bar -->
+      <div class="navbar p-4">
+        <a class="btn" data-bs-toggle="offcanvas" href="#settings-panel" id="settings-btn" role="button"
+           aria-controls="offcanvasExample">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+        <a class="btn btn-outline-primary" href="login.html" role="button">Login</a>
       </div>
-      
-       <div class="gridcontainer">
-        
-        <label class="gridbtn">Pomodoro Duration</label>
-          <div class="pomodoro">
-            <input id = "pomodoro" type = "number" min="0" max="60" step ="1" value="25">
+
+      <!-- Main Content -->
+      <div class="container my-5">
+        <div class="flex-column align-items-center justify-content-center">
+          <!-- Mode Buttons -->
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="p-2">
+              <button data-mode="pomodoro" class="current mode-button px-3" id="js-pomodoro"
+                      onclick="switchMode('pomodoro')">Pomodoro
+              </button>
+            </div>
+            <div class="p-2">
+              <button data-mode="shortBreak" class="mode-button px-3" id="js-short-break"
+                      onclick="switchMode('shortBreak')">Short break
+              </button>
+            </div>
+            <div class="p-2">
+              <button data-mode="longBreak" class="mode-button px-3" id="js-long-break"
+                      onclick="switchMode('longBreak')">Long break
+              </button>
+            </div>
           </div>
-
-
-        <label class="gridbtn">Short Break Duration</label>
-          <div class="shortBreak">
-            <input id="shortBreak" type = "number" min="0" max="60" step ="1" value="5">
+          <!-- Countdown -->
+          <div class="d-flex justify-content-center p-5">
+            <div id="clock">
+              <span id="js-minutes">25</span>
+              <span class="separator">:</span>
+              <span id="js-seconds">00</span>
+            </div>
           </div>
-
-          <label class="gridbtn">Long Break Duration</label>
-          <div class="longBreak">
-            <input id="longBreak"  type = "number" min="0" max="60" step ="1" value="15">
+          <!-- Control Buttons -->
+          <div class="d-flex justify-content-center align-items-center py-5">
+            <div class="px-5">
+              <button class="btn bg-transparent" onclick="resetTimer()"><i class="fa-solid fa-arrow-rotate-left fa-2x"></i></button>
+            </div>
+            <div class="px-5">
+              <input type="image" id="play-pause-btn" src="images/play-solid.svg" class="play" onclick="togglePlay();"
+                     alt="">
+            </div>
+            <div class="px-5">
+              <button class="btn bg-transparent" onclick="next(); resetTimer();"><i class="fa-solid fa-forward fa-2x"></i></button>
+            </div>
           </div>
-
-        <button id="Mybutton">
-        Save
-        </button>
-      </div> 
-
-    </div>
-     <!-- Audio -->
-    </main>
-    <div class="hidden">
-      <audio src="bell.mp3" data-sound="pomodoro"></audio>
-      <audio src="bell.mp3" data-sound="shortBreak"></audio>
-      <audio src="bell.mp3" data-sound="longBreak"></audio>
-    </div>
-    <script src="main.js"></script>
-    <script src="script.js"></script>
-            
-      <div id="content">
-        <form method="get" action="/login.html">
-          <button type="submit">Login</button>
-        </form>
-        <form method="get" action="/signup.html">
-          <button type="submit">Sign Up</button>
-        </form>
+        </div>
       </div>
-   </body>
- </html>
+
+      <!-- Footer -->
+      <div class="p-4">
+        <p class="float-end text-muted">@2022 Google SPS Project by Aaron, Iris, Jonathan, Riana</p>
+      </div>
+    </div>
+    <!-- Settings Panel -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="settings-panel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Settings</h5>
+        <button type="button" class="btn btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="container">
+          <div class="flex">
+            <label class="form-check-label" for="pomodoro-length">Pomodoro</label>
+            <input id="pomodoro-length" type="range" min="10" max="60" step="5"
+                     value="25" oninput="this.nextElementSibling.value = this.value + ' min'">
+            <output>25 min</output>
+          </div>
+          <div class="flex">
+            <label class="form-check-label" for="short-break-length">Short Break</label>
+              <input id="short-break-length" type="range" min="1" max="30" step="1"
+                   value="5" oninput="this.nextElementSibling.value = this.value + ' min'">
+            <output>5 min</output>
+          </div>
+          <div class="flex">
+            <label class="form-check-label" for="long-break-length">Long Break</label>
+            <input id="long-break-length" type="range" min="10" max="60" step="5"
+                   value="15" oninput="this.nextElementSibling.value = this.value + ' min'">
+            <output>15 min</output>
+          </div>
+          <div class="flex">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="notif-switch">Notifications</label>
+              <input class="form-check-input" type="checkbox" id="notif-switch" checked>
+            </div>
+          </div>
+          <div class="flex">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="sound-switch">Sound</label>
+              <input class="form-check-input" type="checkbox" id="sound-switch" checked>
+            </div>
+          </div>
+          <div class="flex">
+            <label class="form-check-label" for="sound-effect">Sound Effect</label>
+            <select class="form-select" id="sound-effect">
+              <option selected>Bell</option>
+              <option value="1">Beeping</option>
+              <option value="2">Music Box</option>
+              <option value="3">Orchestra</option>
+              <option value="4">Trumpet</option>
+            </select>
+          </div>
+          <div class="container">
+            <button class="btn btn-outline-secondary" id="save-settings-btn" onclick="updateSettings()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Audio -->
+</main>
+<div class="hidden">
+  <audio src="bell.mp3" data-sound="pomodoro"></audio>
+  <audio src="bell.mp3" data-sound="shortBreak"></audio>
+  <audio src="bell.mp3" data-sound="longBreak"></audio>
+</div>
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

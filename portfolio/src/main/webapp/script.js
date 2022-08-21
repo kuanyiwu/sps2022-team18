@@ -12,42 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Required properties
-const timer = {
+
+const soundEffects = {
+  beeping: new Audio('sounds/beeping.mp3'),
+  bell: new Audio('sounds/bell.mp3'),
+  musicBox: new Audio('sounds/musicBox.wav'),
+  orchestra: new Audio('sounds/orchestra.wav'),
+  trumpet: new Audio('sounds/trumpet.mp3')
+}
+
+const settings = {
   pomodoro: 25,
   shortBreak: 5,
   longBreak: 15,
   longBreakInterval: 4,
-  sessions: 0,
+  notification: true,
+  sound: true,
+  effect: soundEffects.bell
 };
+
+let userData = {
+  sessions: 0
+}
+
+// Updates the timer lengths, state for notifications, sound, and type of sound effect
+function updateSettings() {
+  settings.pomodoro = document.getElementById("pomodoro-length").value;
+  settings.shortBreak = document.getElementById("short-break-length").value;
+  settings.longBreak = document.getElementById("long-break-length").value;
+  settings.notification = document.getElementById("notif-switch").checked;
+  settings.sound = document.getElementById("sound-switch").checked;
+  const e = document.getElementById("sound-effect")
+  const text = e.options[e.selectedIndex].text;
+  switch (text) {
+    case 'Bell':
+      settings.effect = soundEffects.bell;
+      break;
+    case 'Beeping':
+      settings.effect = soundEffects.beeping;
+      break;
+    case 'Music Box':
+      settings.effect = soundEffects.musicBox;
+      break;
+    case 'Orchestra':
+      settings.effect = soundEffects.orchestra;
+      break;
+    case 'Trumpet':
+      settings.effect = soundEffects.trumpet;
+      break;
+  }
+}
 
 let interval;
 
-//Once the main button is clicked, the value of the data-action attribute on the button is stored in an action variable 
-//and checked to see if it’s equal to “start”. If so, the startTimer() function is invoked and the countdown begins.
-const buttonSound = new Audio('button-sound.mp3');
-const mainButton = document.getElementById('js-btn');
-mainButton.addEventListener('click', () => {
-  buttonSound.play();
-  const { action } = mainButton.dataset;
-  if (action === 'start') {
-    startTimer();
-  } else {
-    stopTimer();
-  }
-});
+// Once the play-pause button is clicked, the value of the data-action attribute on the button is stored in an action variable
+// and checked to see if it’s equal to “start”. If so, the startTimer() function is invoked and the countdown begins.
+const playPauseBtn = document.getElementById("play-pause-btn");
 
-//Create an event listener that detects a click on the buttons and a function to switch the mode of the timer appropriately
-const modeButtons = document.querySelector('#js-mode-buttons');
-modeButtons.addEventListener('click', handleMode);
 
 function getRemainingTime(endTime) {
-  const currentTime = Date.parse(new Date());
+  const currentTime = Date.parse(new Date().toString());
   const difference = endTime - currentTime;
 
-  const total = Number.parseInt(difference / 1000, 10);
-  const minutes = Number.parseInt((total / 60) % 60, 10);
-  const seconds = Number.parseInt(total % 60, 10);
+  const total = Math.round(difference / 1000);
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
   return {
     total,
@@ -56,63 +85,89 @@ function getRemainingTime(endTime) {
   };
 }
 
-//Countdown function
+// Creates new timer with amount of time
+function setNewTimer(mode) {
+  let {total} = userData.remainingTime;
+  const endTime = new Date().getTime() + total * 1000;
+}
+
+// Countdown function
 function startTimer() {
-  let { total } = timer.remainingTime;
-  const endTime = Date.parse(new Date()) + total * 1000;
+  let {total} = settings.remainingTime;
+  const endTime = new Date().getTime() + total * 1000;
 
-  if (timer.mode === 'pomodoro') timer.sessions++;
-
-  mainButton.dataset.action = 'stop';
-  mainButton.classList.add('active');
+  if (settings.mode === 'pomodoro') userData.sessions++;
 
   interval = setInterval(function() {
-    timer.remainingTime = getRemainingTime(endTime);
+    settings.remainingTime = getRemainingTime(endTime);
     updateClock();
 
-    total = timer.remainingTime.total;
+    total = settings.remainingTime.total;
+
     if (total <= 0) {
       clearInterval(interval);
-
-      switch (timer.mode) {
-        case 'pomodoro':
-          if (timer.sessions % timer.longBreakInterval === 0) {
-            switchMode('longBreak');
-          } else {
-            switchMode('shortBreak');
-          }
-          break;
-        default:
-          switchMode('pomodoro');
-      }
+      next(); // advance to next mode
 
       if (Notification.permission === 'granted') {
         const text =
-          timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+          settings.mode === 'pomodoro' ? 'Get to work!' : 'Take a break!';
         new Notification(text);
       }
 
-      document.querySelector(`[data-sound="${timer.mode}"]`).play();
+      document.querySelector(`[data-sound="${settings.mode}"]`).play();
 
       startTimer();
     }
   }, 1000);
 }
 
-//Stop the timer when the stop button is clicked
+// Stops the timer
 function stopTimer() {
   clearInterval(interval);
-
-  mainButton.dataset.action = 'start';
-  mainButton.classList.remove('active');
 }
 
-//This function is how the countdown portion of the application is updated.
-//The updateClock() function extracts the value of the minutes and seconds properties on the 
-//remainingTime object and pads them with zeros where necessary so that the number always has a width of two.
+// Resets the timer
+function resetTimer() {
+  if (settings.mode === 'pomodoro') userData.sessions--;
+  if (playPauseBtn.className==='pause') togglePlay();
+  updateClock();
+}
+
+// Toggles play and pause button image and starts and stops timer
+function togglePlay() {
+  if (playPauseBtn.className!=='pause') {
+    startTimer();
+    disableModeSwitching();
+    playPauseBtn.src='images/pause-solid.svg';
+    playPauseBtn.className='pause';
+
+  } else if (playPauseBtn.className==='pause') {
+    stopTimer();
+    enableModeSwitching();
+    playPauseBtn.src='images/play-solid.svg';
+    playPauseBtn.className='play';
+  }
+  return false;
+}
+// Helper function called from togglePlay: disables mode switching.
+function disableModeSwitching() {
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    if (!btn.classList.contains('current')) btn.disabled = true;
+  });
+}
+// Helper function called from togglePlay: enables mode switching.
+function enableModeSwitching() {
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    if (!btn.classList.contains('current')) btn.disabled = false;
+  });
+}
+
+// This function is how the countdown portion of the application is updated.
+// The updateClock() function extracts the value of the minutes and seconds properties on the
+// remainingTime object and pads them with zeros where necessary so that the seconds number always has a width of two.
 function updateClock() {
-  const { remainingTime } = timer;
-  const minutes = `${remainingTime.minutes}`.padStart(2, '0');
+  const { remainingTime } = settings;
+  const minutes = `${remainingTime.minutes}`;
   const seconds = `${remainingTime.seconds}`.padStart(2, '0');
 
   const min = document.getElementById('js-minutes');
@@ -121,43 +176,53 @@ function updateClock() {
   sec.textContent = seconds;
 
   const text =
-    timer.mode === 'pomodoro' ? 'Get back to work!' : 'Take a break!';
+    settings.mode === 'pomodoro' ? 'Get to work!' : 'Take a break!';
   document.title = `${minutes}:${seconds} — ${text}`;
 }
 
-//The switchMode() function adds two new properties to the timer object. 
-//First, a mode property is set to the current mode which could be pomodoro, shortBreak or longBreak. 
-//Next, a remainingTime property is set on the timer. This is an object which contains three properties of its own:
+// Advances the timer to the next mode
+function next(){
+  switch (settings.mode) {
+    case 'pomodoro':
+      if (userData.sessions % settings.longBreakInterval === 0 && userData.sessions !== 0) {
+        switchMode('longBreak');
+      } else {
+        switchMode('shortBreak');
+      }
+      break;
+    default:
+      switchMode('pomodoro');
+  }
+}
+/* The switchMode() function adds two new properties to the timer object.
+First, a mode property is set to the current mode which could be pomodoro, shortBreak or longBreak.
+Next, a remainingTime property is set on the timer. This is an object which contains three properties of its own: */
 function switchMode(mode) {
-  timer.mode = mode;
-  timer.remainingTime = {
-    total: timer[mode] * 60,
-    minutes: timer[mode],
+  settings.mode = mode;
+  settings.remainingTime = {
+    total: settings[mode] * 60,
+    minutes: settings[mode],
     seconds: 0,
   };
-
-  document
-    .querySelectorAll('button[data-mode]')
-    .forEach(e => e.classList.remove('active'));
-  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+  document.querySelector('.mode-button.current').classList.remove('current');
+  document.querySelector(`[data-mode="${mode}"]`).classList.add('current');
+  updateColors(mode);
+}
+// Helper function to update the colors. Called when switching mode.
+function updateColors(mode) {
   document.body.style.backgroundColor = `var(--${mode})`;
-
-  updateClock();
+  document.getElementById('clock').style.textShadow = `0 4px 4px var(--${mode}-shadow)`;
+  document.querySelectorAll('.mode-button').forEach(btn => {
+    btn.style.color = `var(--${mode}-shadow)`;
+    if (btn.classList.contains('current')) {
+      btn.style.borderColor = `var(--${mode}-shadow)`;
+    }
+  })
 }
 
-//Within the handleMode() function, the value of the data-mode attribute is retrieved from the target element.
-function handleMode(event) {
-  const { mode } = event.target.dataset;
-
-  if (!mode) return;
-
-  switchMode(mode);
-  stopTimer();
-}
-
-//This ensures that the default mode for the timer is pomodoro and the contents of timer.
-//remainingTime is set to the appropriate values for a pomodoro session
-//In addition, this functions ask permission to the user whether they want notifications on their web browser
+/* This ensures that the default mode for the timer is pomodoro and the contents of timer.
+remainingTime is set to the appropriate values for a pomodoro session
+In addition, this functions ask permission to the user whether they want notifications on their web browser */
 document.addEventListener('DOMContentLoaded', () => {
   if ('Notification' in window) {
     if (
@@ -177,29 +242,3 @@ document.addEventListener('DOMContentLoaded', () => {
   switchMode('pomodoro');
 });
 
-//
-function next(){
-  
-    switch (timer.mode) {
-      case 'pomodoro':
-        if (timer.sessions % timer.longBreakInterval > 0) {
-          switchMode('longBreak');
-        } else {
-          switchMode('shortBreak');
-        }
-        break;
-      default:
-        switchMode('pomodoro');
-    }
-};
-
-
-// Set the width of the sidebar to 772px (show it) 
-function openNav() {
-  document.getElementById("mySidepanel").style.width = "772px";
-}
-
-//Set the width of the sidebar to 0 (hide it) 
-function closeNav() {
-  document.getElementById("mySidepanel").style.width = "0";
-}

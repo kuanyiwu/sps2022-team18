@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap");
+
 html {
   box-sizing: border-box;
 }
@@ -9,9 +11,12 @@ html {
 }
 
 :root {
-  --pomodoro: #F7F2F0;
-  --shortBreak: #F0F4F7;
-  --longBreak: #F0F4F7;
+  --pomodoro: #f5f0f0;
+  --shortBreak: #f0f4f6;
+  --longBreak: #f2f5f0;
+  --pomodoro-shadow: #D2000B;
+  --shortBreak-shadow: #0976BF;
+  --longBreak-shadow: #589C00;
 }
 
 
@@ -21,106 +26,62 @@ body {
   user-select: none;
 }
 
-.login{
-position: absolute;
-width: 60px;
-height: 30px;
-left: 1286px;
-top: 68px;
-
-font-family: 'Raleway';
-font-style: normal;
-font-weight: 600;
-font-size: 16px;
-line-height: 19px;
-border-color: transparent;
-/* identical to box height */
-
-letter-spacing: -0.02em;
-
-color: #0A060E;
+.height-full {
+  height: 100vh;
+  overflow: auto;
 }
 
-.timer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
+.bg-transparent {
+  background-color: transparent;
+}
+
+#clock {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 175px;
+  line-height: 235px;
   text-align: center;
+  letter-spacing: -0.02em;
+  color: #0A060E;
+  text-shadow: 0 4px 4px var(--pomodoro-shadow);
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.countdown{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  gap: 10px;
-  width: 523px;
-  height: 224px;
-  flex: none;
-  order: 1;
-  flex-grow: 0;
+@media screen and (max-width: 550px) {
+  .clock {
+    font-size: 8rem;
   }
-
-.clock {
-width: 503px;
-height: 235px;
-font-family: 'Raleway', sans-serif;
-font-style: normal;
-font-weight: 700;
-font-size: 150px;
-line-height: 235px;
-text-align: center;
-letter-spacing: -0.02em;
-color: #0A060E;
-text-shadow: 0px 4px 4px #D2000B;
-flex: none;
-order: 0;
-flex-grow: 0;
 }
 
 .mode-button {
-  width: 103px;
-  height: 19px;
-  font-family: 'Raleway';
+  font-family: 'Raleway', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
-  color: #D2000B;
-  border: 1px solid transparent;
-  margin: 0px;
-  border-radius: 4px;
+  color: var(--pomodoro-shadow);
+  border: none;
+  margin: 0;
   background: none;
-
 }
 
-.mode-button.active {
-  border-color:  #D2000B;
+.mode-button.current {
+  border: 2px solid var(--pomodoro-shadow);
+  border-radius: 10px;
 }
 
-
-.main-button {
-  cursor: pointer;
-
-  width: 200px;
-  background-color: transparent;
-  border-width: initial;
-  border-style: none;
-  margin: 20px 0px 0px;
-  padding: 0px 12px;
-  border-radius: 4px;
-  transition: color 0.5s ease-in-out 0s;
+.mode-button:disabled,
+.mode-button[disabled]{
+  opacity: 0.6;
 }
 
-button:focus, button:active {
-  outline: none;
-}
+.play, .pause {width:100px;height:100px;}
 
-.main-button.active {
+.play-pause-btn.active {
   transform: translateY(6px);
   box-shadow: none;
   outline: none;
@@ -134,130 +95,4 @@ button:focus, button:active {
   .clock {
     font-size: 8rem;
   }
-}
-
-.restart{
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  border-color: transparent;  
-  /* Inside auto layout */
-  
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  }
-
-.forward
-{
-width: 50px;
-height: 50px;background-color: transparent;
-border-color: transparent;
-/* Inside auto layout */
-
-flex: none;
-order: 2;
-flex-grow: 0;
-}
-
-
-/* The sidepanel menu */
-.sidepanel {
-  position: fixed;
-  width: 0px;
-  height: 761px;
-  z-index: 1; /* Stay on top */
-  top: 0;
-  left: 0;
-  background: rgba(10, 6, 14, 0.1);
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
-}
-
-.setting{
-position: absolute;
-width: 92px;
-height: 28px;
-left: 340px;
-top: 118px;
-
-font-family: 'Raleway';
-font-style: normal;
-font-weight: 700;
-font-size: 24px;
-line-height: 28px;
-text-align: center;
-letter-spacing: -0.02em;
-color: #000000;
-}
-
-.gridcontainer{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 40px 30px;
-  gap: 20px;
-  
-  position: absolute;
-  width: 350px;
-  height: 300px;
-  left: 184px;
-  top: 150px;
-  
-}
-
-.gridbtn{
-  width: 300px;
-  height: 20px;
-
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: left;
-  letter-spacing: -0.02em;
-  
-  color: #000000;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-
-  background-color: transparent;
-  border-color: transparent;
-}
-
-/* The sidepanel links */
-.sidepanel a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidepanel a:hover {
-  color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidepanel .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-/* Style the button that is used to open the sidepanel */
-.openbtn {
-position: relative;
-width: 25px;
-height: 25px;
-left: 33px;
-top: 957px;
-border-color: transparent;
 }
